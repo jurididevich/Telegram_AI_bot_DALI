@@ -1,10 +1,9 @@
-# Telegram AI Bot with LangChain (n8n)
+# Telegram AI Bot with n8n
 
 An AI-powered Telegram bot built with the **n8n** workflow automation platform. It features role-based access control, persistent conversation memory, and integrated DALL-E 3 image generation capabilities.
 
 ![n8n](https://img.shields.io/badge/Platform-n8n-red)
 ![OpenAI](https://img.shields.io/badge/AI-GPT--4--Turbo-blue)
-![LangChain](https://img.shields.io/badge/Framework-LangChain-green)
 
 ---
 
