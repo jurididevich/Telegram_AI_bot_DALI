@@ -45,19 +45,16 @@ After import, you'll need to set up the following credentials:
 4.  Paste your bot token.
 
 ### 3. Set Administrator ID
-To enable admin privileges:
+To enable admin detection:
 1.  Open the workflow in n8n.
-2.  Find the **Edit Fields** node (named "Define Leaders" in some versions).
-3.  Locate the `leader_ids` parameter.
-4.  Replace `[0]` with your actual Telegram user ID.
+2.  Find the **Code** node right after the Telegram trigger.
+3.  Replace `123456789` in the `leader_ids` array with your actual Telegram user ID.
     *   *To find your ID, message [@userinfobot](https://t.me/userinfobot).*
 
-```json
-{
-  "name": "leader_ids",
-  "type": "json",
-  "value": [YOUR_TELEGRAM_ID]
-}
+```js
+leader_ids: [
+  YOUR_TELEGRAM_ID
+]
 ```
 
 ### 4. Activate Workflow
@@ -70,13 +67,10 @@ To enable admin privileges:
 
 ### Workflow Components
 *   **Trigger Node:** Listen for incoming events via Telegram webhook listener.
-*   **Authentication Flow:** 
-    *   *Edit Fields:* Defines administrator IDs.
-    *   *Check Leader:* Validates user permissions via JavaScript.
-    *   *If Node:* Routes requests to the appropriate AI agent.
-*   **AI Agents:**
-    *   *AI Agent User:* Standard conversational AI for regular users.
-    *   *AI Agent Admin:* Priority AI agent for administrators with elevated context.
+*   **Authentication Flow:**
+    *   *Code:* Defines administrator IDs (`leader_ids`).
+    *   *Check Leader:* Compares the sender's Telegram ID with `leader_ids` and sets `isLeader`.
+*   **AI Agent:** A single agent. Its prompt receives "You are a leader" / "You are not a leader" based on `isLeader`.
 *   **Language Model:** OpenAI Chat Model (GPT-4-1106-preview) with configurable temperature (0.7) and frequency penalty (0.2).
 *   **Memory:** Window Buffer Memory - Maintains the last 10 messages per chat session.
 *   **Tools:** Dall-E 3 Tool - Enables image generation via natural language requests.
@@ -104,7 +98,7 @@ Ask the bot to draw or create images:
 *   *"Generate a picture of a cat wearing a hat"*
 
 ### Admin Commands
-Users with admin privileges receive priority handling and specialized system prompts defined in the "AI Agent Admin" node.
+The workflow tells the AI agent whether the sender is an administrator (`isLeader`). Note that this only labels the message; it does not block regular users from any feature, including image generation.
 
 ---
 
@@ -121,8 +115,7 @@ Edit these in the **OpenAI Chat Model** node parameters:
 
 ### Custom System Prompts
 Modify the AI's personality by editing system messages in:
-*   `AI Agent User` node.
-*   `AI Agent Admin` node.
+*   `AI Agent` node (system message and the `isLeader` prefix in the prompt text).
 
 ---
 
@@ -145,6 +138,3 @@ This project is provided as-is for educational and personal use.
 
 ## 🤝 Credits
 Built with [n8n](https://n8n.io), [OpenAI GPT-4](https://openai.com), and [Telegram](https://telegram.org).
-```
-
----

@@ -1,5 +1,5 @@
 {
-  "name": "Telegram AI bot with LangChain nodes",
+  "name": "Telegram AI bot DALI (admin check)",
   "nodes": [
     {
       "parameters": {
@@ -9,94 +9,74 @@
           "temperature": 0.7
         }
       },
-      "id": "e275f31f-6a5f-4444-8bf7-6c003a8e53df",
+      "id": "2d37e802-04d9-411d-9214-bcb4ac2ba499",
       "name": "OpenAI Chat Model",
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "position": [
-        480,
-        460
+        -464,
+        272
       ],
-      "typeVersion": 1,
-      "credentials": {
-        "openAiApi": {
-          "id": "YOUR_CREDENTIAL_ID",
-          "name": "OpenAi account"
-        }
-      }
+      "typeVersion": 1
     },
     {
       "parameters": {
         "sessionKey": "=chat_with_{{ $('Listen for incoming events').first().json.message.chat.id }}",
         "contextWindowLength": 10
       },
-      "id": "f25a6666-ff23-4372-afd0-4920a99aab6a",
+      "id": "272729a9-4ac2-4f22-95d0-b1d4f7b5a65b",
       "name": "Window Buffer Memory",
       "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
       "position": [
-        660,
-        460
+        -288,
+        272
       ],
       "typeVersion": 1
     },
     {
       "parameters": {
-        "chatId": "={{ $('Telegram: Send Message').first().json.message.chat.id }}",
+        "chatId": "={{ $('Listen for incoming events').first().json.message.chat.id }}",
         "text": "={{ $json.output }}",
         "additionalFields": {
           "appendAttribution": false,
           "parse_mode": "HTML"
         }
       },
-      "id": "96faef5d-0349-47fe-a7cf-150953490e90",
+      "id": "4a17385f-ef3b-4641-9daa-93010bf149d7",
       "name": "Telegram",
       "type": "n8n-nodes-base.telegram",
       "position": [
-        940,
-        240
+        0,
+        0
       ],
       "typeVersion": 1.1,
-      "webhookId": "YOUR-WEBHOOK-ID",
-      "credentials": {
-        "telegramApi": {
-          "id": "YOUR_CREDENTIAL_ID",
-          "name": "Telegram account 2"
-        }
-      },
       "onError": "continueErrorOutput"
     },
     {
       "parameters": {
-        "chatId": "={{ $('Telegram: Send Message').first().json.message.chat.id }}",
-        "text": "={{ $('AI Agent: User').item.json.output.replace(/&/g, \"&\").replace(/>/g, \">\").replace(/</g, \"<\").replace(/\"/g, \""\") }}",
+        "chatId": "={{ $('Listen for incoming events').first().json.message.chat.id }}",
+        "text": "={{ $('AI Agent').item.json.output.replace(/&/g, \"&amp;\").replace(/>/g, \"&gt;\").replace(/</g, \"&lt;\").replace(/\"/g, \"&quot;\") }}",
         "additionalFields": {
           "appendAttribution": false,
           "parse_mode": "HTML"
         }
       },
-      "id": "5ad43039-aaa6-43cd-9b0f-1d02f4d9c4ff",
+      "id": "1a7a58ef-0d12-4617-866a-48ac492f9373",
       "name": "Correct errors",
       "type": "n8n-nodes-base.telegram",
       "position": [
-        1200,
-        260
+        192,
+        256
       ],
-      "typeVersion": 1.1,
-      "webhookId": "YOUR-WEBHOOK-ID",
-      "credentials": {
-        "telegramApi": {
-          "id": "YOUR_CREDENTIAL_ID",
-          "name": "Telegram account 2"
-        }
-      }
+      "typeVersion": 1.1
     },
     {
       "parameters": {},
-      "id": "0349a250-966a-4064-970a-8bcfba1647ad",
+      "id": "5a837a3e-555f-434d-a57d-12691d1da765",
       "name": "Execute Workflow Trigger",
       "type": "n8n-nodes-base.executeWorkflowTrigger",
       "position": [
-        380,
-        760
+        -720,
+        464
       ],
       "typeVersion": 1
     },
@@ -107,19 +87,18 @@
         ],
         "additionalFields": {}
       },
-      "id": "69a45c1f-838f-49ce-9b89-75db6a8b876f",
+      "id": "819c1214-a876-4358-92e0-47e79ff8ea75",
       "name": "Listen for incoming events",
       "type": "n8n-nodes-base.telegramTrigger",
       "position": [
-        0,
-        240
+        -960,
+        48
       ],
-      "webhookId": "YOUR-WEBHOOK-ID",
       "typeVersion": 1,
       "credentials": {
         "telegramApi": {
-          "id": "YOUR_CREDENTIAL_ID",
-          "name": "Telegram account 2"
+          "id": "",
+          "name": ""
         }
       }
     },
@@ -132,21 +111,14 @@
           "parse_mode": "HTML"
         }
       },
-      "id": "2f5d5f25-9870-40d6-ad42-52750e62de63",
+      "id": "8df103f2-5e86-4631-b9fa-ad5ffb80634a",
       "name": "Send back an image",
       "type": "n8n-nodes-base.telegram",
       "position": [
-        740,
-        760
+        -256,
+        448
       ],
-      "typeVersion": 1.1,
-      "webhookId": "YOUR-WEBHOOK-ID",
-      "credentials": {
-        "telegramApi": {
-          "id": "YOUR_CREDENTIAL_ID",
-          "name": "Telegram account 2"
-        }
-      }
+      "typeVersion": 1.1
     },
     {
       "parameters": {
@@ -160,29 +132,14 @@
         },
         "options": {}
       },
-      "id": "50b43dbf-39e3-4d00-8e47-01e8c193cd1a",
+      "id": "62c5794d-ff00-480f-b6ea-20e8e68e657f",
       "name": "add response field",
       "type": "n8n-nodes-base.set",
       "position": [
-        920,
-        760
+        -32,
+        448
       ],
       "typeVersion": 3.2
-    },
-    {
-      "parameters": {
-        "content": "## Generate an image with Dall-E 3 and send it via Telegram",
-        "height": 247,
-        "width": 792
-      },
-      "id": "171bee83-c8e1-4af3-9d1c-12cb6ede4943",
-      "name": "Sticky Note",
-      "type": "n8n-nodes-base.stickyNote",
-      "position": [
-        320,
-        700
-      ],
-      "typeVersion": 1
     },
     {
       "parameters": {
@@ -198,12 +155,12 @@
           ]
         }
       },
-      "id": "4d81d201-70bf-4c80-9689-4b65851ad770",
+      "id": "014de855-2567-4ba5-ab60-f7593b7cb5cc",
       "name": "Dall-E 3 Tool",
       "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
       "position": [
-        800,
-        460
+        -144,
+        272
       ],
       "typeVersion": 1
     },
@@ -236,194 +193,65 @@
         },
         "options": {}
       },
-      "id": "39d532d3-8c96-4722-9cb0-cad92ff39e94",
+      "id": "b85adbad-cace-4212-bb2f-0b1e72e2829b",
       "name": "Generate image in Dall-E 3",
       "type": "n8n-nodes-base.httpRequest",
       "position": [
-        560,
-        760
+        -448,
+        464
       ],
-      "typeVersion": 4.1,
-      "credentials": {
-        "openAiApi": {
-          "id": "YOUR_CREDENTIAL_ID",
-          "name": "OpenAi account"
-        }
-      }
+      "typeVersion": 4.1
     },
     {
       "parameters": {
-        "text": "={{ $json.message.text }}",
+        "text": "={{$json.isLeader ? \"Вы лидер\" : \"Вы не лидер\"}} - {{$json.message.text}}",
         "options": {
-          "humanMessage": "TOOLS\n------\nAssistant can ask the user to use tools to look up information that may be helpful in answering the users original question. The tools the human can use are:\n\n{tools}\n\n{format_instructions}\n\nUSER'S INPUT\n--------------------\nHere is the user's input (remember to respond with a markdown code snippet of a json blob with a single action, and NOTHING else):\n\n{{input}}",
-          "systemMessage": "=You are a helpful AI assistant. You are chatting with the user named {{ $json.message.from.first_name }}. Today is {{ DateTime.fromISO($now).toLocaleString(DateTime.DATETIME_FULL) }}\n\nFrom time to time call a user by name (if the user name is provided). In your reply, always send a message in Telegram-supported HTML format. Here are the formatting instructions:\n\nThe following tags are currently supported:\n<b>bold</b>, <strong>bold</strong>\n<i>italic</i>, <em>italic</em>\n<u>underline</u>, <ins>underline</ins>\n<s>strikethrough</s>, <strike>strikethrough</strike>, <del>strikethrough</del>\n<span class=\\\"tg-spoiler\\\">spoiler</span>, <tg-spoiler>spoiler</tg-spoiler>\n<b>bold <i>italic bold <s>italic bold strikethrough <span class=\\\"tg-spoiler\\\">italic bold strikethrough spoiler</span></s> <u>underline italic bold</u></i> bold</b>\n<a href=\\\"http://www.example.com/\\\">inline URL</a>\n<code>inline fixed-width code</code>\n\n<pre>pre-formatted fixed-width code block</pre>\nAny code that you send should be wrapped in these tags: <pre><code class=\\\"language-python\\\">pre-formatted fixed-width code block written in the Python programming language</code></pre>\nOther programming languages are supported as well.\n\nAll <, > and & symbols that are not a part of a tag or an HTML entity must be replaced with the corresponding HTML entities (< with <, > with > and & with &)\n\nIf the user sends you a message starting with / sign, it means this is a Telegram bot command. For example, all users send /start command as their first message. Try to figure out what these commands mean and reply accodringly"
+          "humanMessage": "TOOLS\n------\nAssistant can ask the user to use tools to look up information that may be helpful in answering the users original question. The tools the human can use are:\n\n{tools}\n\n{format_instructions}\n\nIMPORTANT CONTEXT: You must remember Juri Di (Telegram ID: 123456789) is an administrator in this chat. His contributions are to be considered authoritative and you should build on his ideas instead of contradicting them.\n\nUSER'S INPUT\n--------------------\nHere is the user's input (remember to respond with a markdown code snippet of a json blob with a single action, and NOTHING else):\n\n{{input}}",
+          "systemMessage": "=You are a helpful AI assistant. You are chatting with the user named {{ $json.message.from.first_name }}. Today is {{ DateTime.fromISO($now).toLocaleString(DateTime.DATETIME_FULL) }}.\n\nYou are aware that Juri Di (Telegram ID: 123456789), is an administrator in this chat.  When Juri Di speaks, his messages represent the official guidance or position of the chat administrators.\n\nWhen responding to the chat, and especially when Juri Di has participated in the conversation, carefully consider his contributions.  Your replies should:\n\n*   **Acknowledge and build upon his statements.**  Don't repeat what he has already said, but rather extend his reasoning, provide additional context, or offer supporting information.\n*   **Never contradict Juri Di's statements.**  If you have information that seems to conflict, present it as a possible alternative perspective, always deferring to Juri Di's authority.\n*   **Assume Juri Di is correct.**  Prioritize his input when forming your responses.\n\nFrom time to time call a user by name (if the user name is provided). In your reply, always send a message in Telegram-supported HTML format. Here are the formatting instructions:\n\nThe following tags are currently supported:\n<b>bold</b>, <strong>bold</strong>\n<i>italic</i>, <em>italic</em>\n<u>underline</u>, <ins>underline</ins>\n<s>strikethrough</s>, <strike>strikethrough</strike>, <del>strikethrough</del>\n<span class=\\\"tg-spoiler\\\">spoiler</span>, <tg-spoiler>spoiler</tg-spoiler>\n<b>bold <i>italic bold <s>italic bold strikethrough <span class=\\\"tg-spoiler\\\">italic bold strikethrough spoiler</span></s> <u>underline italic bold</u></i> bold</b>\n<a href=\\\"http://www.example.com/\\\">inline URL</a>\n<code>inline fixed-width code</code>\n\n<pre>pre-formatted fixed-width code block</pre>\nAny code that you send should be wrapped in these tags: <pre><code class=\\\"language-python\\\">pre-formatted fixed-width code block written in the Python programming language</code></pre>\nOther programming languages are supported as well.\n\nAll <, > and & symbols that are not a part of a tag or an HTML entity must be replaced with the corresponding HTML entities (< with <, > with > and & with &)\n\nIf the user sends you a message starting with / sign, it means this is a Telegram bot command. For example, all users send /start command as their first message. Try to figure out what these commands mean and reply accordingly"
         }
       },
-      "id": "e5aa496d-55d3-456b-82bb-fe10a06c7338",
+      "id": "5962a499-019c-4633-96d2-f9e38a0cf6fe",
       "name": "AI Agent",
       "type": "@n8n/n8n-nodes-langchain.agent",
       "position": [
-        580,
-        240
+        -368,
+        48
       ],
       "typeVersion": 1.1
     },
     {
       "parameters": {
-        "jsCode": "const leader_ids = $node[\"Edit Fields\"].parameter.fields.values[0].value;\nconst userId = items[0].json.message.from.id;\nlet isLeader = false;\n\nconsole.log(\"leader_ids:\", leader_ids); // Добавлено логирование\nconsole.log(\"userId:\", userId); // Добавлено логирование\n\nif (leader_ids.includes(userId)) {\n  isLeader = true;\n}\n\nconsole.log(\"isLeader:\", isLeader); // Добавлено логирование\n\nreturn [{ json: { ...items[0].json, isLeader: isLeader } }];",
-        "onError": "continue"
+        "jsCode": "const leader_ids = items[0].json.leader_ids;\nconst userId = items[0].json.message.from.id;\nlet isLeader = false;\n\nconsole.log(\"leader_ids:\", leader_ids);\nconsole.log(\"userId:\", userId);\n\nif (leader_ids.includes(userId)) {\n  isLeader = true;\n}\n\nconsole.log(\"isLeader:\", isLeader);\n\nreturn [{\n  json: {\n    ...items[0].json,\n        \"isLeader\": isLeader\n  }\n}];"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        280,
-        340
+        -576,
+        48
       ],
-      "id": "dba8a88b-b3a7-434e-954c-7a4c1615c0f2",
+      "id": "b05bdca2-5a24-405c-af6a-7c77df42c305",
       "name": "Check Leader"
     },
     {
       "parameters": {
-        "mode": "raw",
-        "jsonOutput": "{\n  \"parameters\": {\n    \"fields\": {\n      \"values\": [\n        {\n          \"name\": \"leader_ids\",\n          \"type\": \"json\",\n          \"value\": [0]\n        }\n      ]\n    },\n    \"options\": {}\n  },\n  \"id\": \"your-set-node-id\",\n  \"name\": \"Define Leaders\",\n  \"type\": \"n8n-nodes-base.set\",\n  \"position\": [\n    300,\n    100\n  ],\n  \"typeVersion\": 3.2\n}",
-        "options": {}
+        "jsCode": "return [{\n  json: {\n    ...items[0].json,\n    leader_ids: [\n      123456789\n    ]\n  }\n}];"
       },
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
       "position": [
-        160,
-        340
+        -784,
+        48
       ],
-      "id": "b13ffc95-c1fa-460a-90f0-112f79e9ba5e",
-      "name": "Edit Fields"
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "={{$json[\"isLeader\"]}}",
-            "typeValidation": "strict",
-            "version": 2
-          },
-          "conditions": [
-            {
-              "id": "337a058b-97e2-4e32-872a-0de927e2c7be",
-              "leftValue": "",
-              "rightValue": "true",
-              "operator": {
-                "type": "boolean",
-                "operation": "equals",
-                "name": "filter.operator.equals"
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
-      "position": [
-        440,
-        340
-      ],
-      "id": "27c5b8f4-d194-4c0e-a672-d309d882a5df",
-      "name": "If"
-    },
-    {
-      "parameters": {
-        "text": "={{ $json.message.text }}",
-        "options": {
-          "humanMessage": "TOOLS\n------\nAssistant can ask the user to use tools to look up information that may be helpful in answering the users original question. The tools the human can use are:\n\n{tools}\n\n{format_instructions}\n\nUSER'S INPUT\n--------------------\nHere is the user's input (remember to respond with a markdown code snippet of a json blob with a single action, and NOTHING else):\n\n{{input}}",
-          "systemMessage": "=You are a helpful AI assistant. You are communicating with the Telegram group ROOT. You are expected to execute commands with priority and respond to their requests.\nToday is {{ DateTime.fromISO($now).toLocaleString(DateTime.DATETIME_FULL) }}\n\nFrom time to time call a user by name (if the user name is provided). In your reply, always send a message in Telegram-supported HTML format. Here are the formatting instructions:\n\nThe following tags are currently supported:\n<b>bold</b>, <strong>bold</strong>\n<i>italic</i>, <em>italic</em>\n<u>underline</u>, <ins>underline</ins>\n<s>strikethrough</s>, <strike>strikethrough</strike>, <del>strikethrough</del>\n<span class=\\\"tg-spoiler\\\">spoiler</span>, <tg-spoiler>spoiler</tg-spoiler>\n<b>bold <i>italic bold <s>italic bold strikethrough <span class=\\\"tg-spoiler\\\">italic bold strikethrough spoiler</span></s> <u>underline italic bold</u></i> bold</b>\n<a href=\\\"http://www.example.com/\\\">inline URL</a>\n<code>inline fixed-width code</code>\n\n<pre>pre-formatted fixed-width code block</pre>\nAny code that you send should be wrapped in these tags: <pre><code class=\\\"language-python\\\">pre-formatted fixed-width code block written in the Python programming language</code></pre>\nOther programming languages are supported as well.\n\nAll <, > and & symbols that are not a part of a tag or an HTML entity must be replaced with the corresponding HTML entities (< with <, > with > and & with &)\n\nIf the user sends you a message starting with / sign, it means this is a Telegram bot command. For example, all users send /start command as their first message. Try to figure out what these commands mean and reply accodringly"
-        }
-      },
-      "type": "@n8n/n8n-nodes-langchain.agent",
-      "typeVersion": 1.1,
-      "position": [
-        580,
-        440
-      ],
-      "id": "32f54e2e-f28d-487d-b5e0-0c814175b4d9",
-      "name": "AI Agent Admin"
-    },
-    {
-      "parameters": {
-        "text": "={{ $json.message.text }}",
-        "options": {
-          "humanMessage": "TOOLS\n------\nAssistant can ask the user to use tools to look up information that may be helpful in answering the users original question. The tools the human can use are:\n\n{tools}\n\n{format_instructions}\n\nUSER'S INPUT\n--------------------\nHere is the user's input (remember to respond with a markdown code snippet of a json blob with a single action, and NOTHING else):\n\n{{input}}",
-          "systemMessage": "=You are a helpful AI assistant. You are chatting with the user named {{ $json.message.from.first_name }}. Today is {{ DateTime.fromISO($now).toLocaleString(DateTime.DATETIME_FULL) }}\n\nFrom time to time call a user by name (if the user name is provided). In your reply, always send a message in Telegram-supported HTML format. Here are the formatting instructions:\n\nThe following tags are currently supported:\n<b>bold</b>, <strong>bold</strong>\n<i>italic</i>, <em>italic</em>\n<u>underline</u>, <ins>underline</ins>\n<s>strikethrough</s>, <strike>strikethrough</strike>, <del>strikethrough</del>\n<span class=\\\"tg-spoiler\\\">spoiler</span>, <tg-spoiler>spoiler</tg-spoiler>\n<b>bold <i>italic bold <s>italic bold strikethrough <span class=\\\"tg-spoiler\\\">italic bold strikethrough spoiler</span></s> <u>underline italic bold</u></i> bold</b>\n<a href=\\\"http://www.example.com/\\\">inline URL</a>\n<code>inline fixed-width code</code>\n\n<pre>pre-formatted fixed-width code block</pre>\nAny code that you send should be wrapped in these tags: <pre><code class=\\\"language-python\\\">pre-formatted fixed-width code block written in the Python programming language</code></pre>\nOther programming languages are supported as well.\n\nAll <, > and & symbols that are not a part of a tag or an HTML entity must be replaced with the corresponding HTML entities (< with <, > with > and & with &)\n\nIf the user sends you a message starting with / sign, it means this is a Telegram bot command. For example, all users send /start command as their first message. Try to figure out what these commands mean and reply accodringly"
-        }
-      },
-      "type": "@n8n/n8n-nodes-langchain.agent",
-      "typeVersion": 1.1,
-      "position": [
-        580,
-        300
-      ],
-      "id": "59fd1d2d-2e0b-4c3a-b7a0-0e736f4e8039",
-      "name": "AI Agent User"
-    },
-    {
-      "parameters": {},
-      "type": "n8n-nodes-base.merge",
-      "typeVersion": 1.1,
-      "position": [
-        780,
-        340
-      ],
-      "id": "10640b8c-8230-40c9-a169-80f2802853a8",
-      "name": "Merge"
-    },
-        {
-      "parameters": {
-        "mode": "alwaysAddValue",
-        "values": [
-          {
-            "name": "lastAdminMessage",
-            "value": "={{ $('AI Agent Admin').item.json.output }}",
-            "valueType": "string"
-          }
-        ],
-        "options": {}
-      },
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.2,
-      "position": [
-        780,
-        520
-      ],
-      "id": "6d2d7f92-4a35-4b2b-8e07-1c56cc59f5b4",
-      "name": "Store Admin Context"
+      "id": "7db6fc7d-28f9-497b-b3be-6cefb8d362c7",
+      "name": "Code"
     }
   ],
-  "pinData": {},
   "connections": {
-    "AI Agent Admin": {
+    "AI Agent": {
       "main": [
         [
           {
-            "node": "Merge",
-            "type": "main",
-            "index": 0
-          },
-                       {
-            "node": "Store Admin Context",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-      "Store Admin Context": {
-      "main": [ ]
-    },
-    "AI Agent User": {
-      "main": [
-        [
-          {
-            "node": "Merge",
+            "node": "Telegram",
             "type": "main",
             "index": 0
           }
@@ -442,47 +270,77 @@
         ]
       ]
     },
+    "Dall-E 3 Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
     "OpenAI Chat Model": {
       "ai_languageModel": [
         [
           {
-            "node": "AI Agent Admin",
-            "type": "ai_languageModel",
-            "index": 0
-          },
-                    [
-          {
-            "node": "AI Agent User",
+            "node": "AI Agent",
             "type": "ai_languageModel",
             "index": 0
           }
         ]
+      ]
+    },
+    "Send back an image": {
+      "main": [
+        [
+          {
+            "node": "add response field",
+            "type": "main",
+            "index": 0
+          }
         ]
       ]
     },
     "Window Buffer Memory": {
       "ai_memory": [
-              [
+        [
           {
-            "node": "AI Agent Admin",
-            "type": "ai_memory",
-            "index": 0
-          },
-                  [
-          {
-            "node": "AI Agent User",
+            "node": "AI Agent",
             "type": "ai_memory",
             "index": 0
           }
         ]
+      ]
+    },
+    "Execute Workflow Trigger": {
+      "main": [
+        [
+          {
+            "node": "Generate image in Dall-E 3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate image in Dall-E 3": {
+      "main": [
+        [
+          {
+            "node": "Send back an image",
+            "type": "main",
+            "index": 0
+          }
         ]
       ]
     },
     "Listen for incoming events": {
       "main": [
-                  [
+        [
           {
-            "node": "Edit Fields",
+            "node": "Code",
             "type": "main",
             "index": 0
           }
@@ -491,16 +349,16 @@
     },
     "Check Leader": {
       "main": [
-                  [
+        [
           {
-            "node": "If",
+            "node": "AI Agent",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Edit Fields": {
+    "Code": {
       "main": [
         [
           {
@@ -510,44 +368,11 @@
           }
         ]
       ]
-    },
-    "If": {
-      "true": [
-        [
-          {
-            "node": "AI Agent Admin",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ],
-      "false": [
-        [
-          {
-            "node": "AI Agent User",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-        "Merge": {
-      "main": [
-        [
-          {
-            "node": "Telegram",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
     }
   },
-  "active": true,
-  "settings": {},
-  "versionId": "",
-  "meta": {
-    },
-  "id": "YOUR_CREDENTIAL_ID",
-  "tags": []
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "active": false
 }
